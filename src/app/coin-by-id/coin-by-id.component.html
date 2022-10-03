@@ -1,0 +1,60 @@
+<div layout-gt-xs="row">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>
+          <mat-icon class="avatar-icon">toll</mat-icon>
+          {{ coin.market_data.market_cap.eur | currency: "EUR":"€":"1.0-0" }}
+        </h1>
+      </mat-card-title>
+      <mat-card-subtitle> Market Capitalisation </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>
+          <mat-icon class="avatar-icon">lock</mat-icon>
+          {{ coin.hashing_algorithm || "unknown" | uppercase }}
+        </h1>
+      </mat-card-title>
+      <mat-card-subtitle> Hashing Algorithm </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>
+          <mat-icon class="avatar-icon">access_time</mat-icon>
+          {{
+            (coin.genesis_date | date: "dd/MM/yyyy") || ("unknown" | uppercase)
+          }}
+        </h1>
+      </mat-card-title>
+      <mat-card-subtitle> Genesis Date </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+</div>
+
+<div layout-gt-xs="row">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title
+        >{{ coin.name | titlecase }} ({{
+          coin.symbol | uppercase
+        }})</mat-card-title
+      >
+      <mat-card-subtitle>
+        <a [href]="coin.links.homepage[0]">{{ coin.links.homepage[0] }}</a>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div
+        [innerHtml]="coin.description.en"
+        style="white-space: pre-wrap"
+      ></div>
+    </mat-card-content>
+  </mat-card>
+</div>

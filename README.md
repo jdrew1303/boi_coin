@@ -1,27 +1,66 @@
 # BoiCoinGeko
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.4.
+## Getting Started
 
-## Development server
+You need to have Node.js v16.10.0 or greater installed (you can do this simply by using [NVM](https://github.com/nvm-sh/nvm)).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+From here install dependencies from the project root:
 
-## Code scaffolding
+```bash
+npm install
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Once thats done you should be ready to run the app using:
 
-## Build
+```bash
+npm start
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+The application is available at: [http://localhost:4200/](http://localhost:4200/). If everything went right you should be greated with the following:
+
+![coin market page](./docs/images/market_page.png)
+
+Clicking on a table row will bring you to the coin details page:
+
+![coin details page](./docs/images/coin_page.png)
+
+If a coin is missing you will be shown a 404 page:
+![coin 404 page](./docs/images/404_page.png)
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `yarn test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Issues Encountered
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- The Coingecko API uses snake_case. I would normally add some middleware or object mappers in the api layer to rename keys to use camelCase. This stops the api from poluting the application. It also helps if the backend renames keys.
 
-## Further help
+- The API doesnt return the number of pages available when doing pagination. This causes issues for the display of data on the frontend. One solution is to load all of the pages in the background and handle pagination properly in the frontend. First draft of this had pagination. I removed it for brevity.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Testing isn't comprehensive in the app. I left the UI components untested, only plain TS/JS services were unit tested. Normally I would use Jest as the test framework. This allows for using snapshot tests for the UI components which is much more effecient. I would also have visual regression tests in place to handle styling and layout testing of the components.
+
+- To keep third party libs to a minimum I didn't use ngrx (angular redux). This would be my preferred approach to tackling projects. I also didnt hook in many of the test libraries (data generators, jest, visual regression, etc.).
+
+- The coin api returns descriptions with `\r\n\r\n` as well as dom nodes. To get this to render properly you need add the following to the dom node holding the description:
+
+  ```html
+  style="white-space: pre-wrap"
+  ```
+
+## Notes On Development
+
+- Main toolbar would hold actions for global parts of the application (user accounts, global search, etc).
+
+- Secondary toolbar holds topical data (current path using breadcrumb, any actions specific to the page, etc).
+
+- The breadcrumb component isnt fully functioning. It's in there to fill out the UI. I do prefer to have this in a real application where there is hierarchy to the routes.
+
+- The side nave would be the main navigation to parts of the application. Again more in there to give a bit of structure to the application.
+
+- The application states have been cut down. Each component should really be a number of components depending on the state:
+  - Not Asked (we haven't begun loading)
+  - Loading (fetching/updating data in progress)
+  - Error (there is an issue with the datasource)
+  - Not Found (item not available 404)
+  - No Data (no data available but 200 return, show user how to add data)
+  - Data (display item as intended)
